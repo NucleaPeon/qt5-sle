@@ -1503,9 +1503,11 @@ void QMakeEvaluator::updateFeaturePaths()
     feature_roots.removeDuplicates();
 
     QStringList ret;
-    foreach (const QString &root, feature_roots)
+    for (int i=0; i<feature_roots.length(); ++i) {
+        const QString &root = feature_roots.at(i);
         if (IoUtils::exists(root))
             ret << root;
+    }
     m_featureRoots = new QMakeFeatureRoots(ret);
 }
 

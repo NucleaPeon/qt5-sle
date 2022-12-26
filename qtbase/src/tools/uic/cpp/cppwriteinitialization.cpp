@@ -802,7 +802,8 @@ void WriteInitialization::acceptWidget(DomWidget *node)
     if (m_uic->customWidgetsInfo()->extends(className, QLatin1String("QTreeView"))
                || m_uic->customWidgetsInfo()->extends(className, QLatin1String("QTreeWidget"))) {
         DomPropertyList headerProperties;
-        foreach (const QString &realPropertyName, realPropertyNames) {
+        for (int i=0; i<realPropertyNames.length(); ++i) {
+            const QString &realPropertyName = realPropertyNames.at(i);
             const QString upperPropertyName = realPropertyName.at(0).toUpper()
                                               + realPropertyName.mid(1);
             const QString fakePropertyName = QLatin1String("header") + upperPropertyName;
@@ -821,9 +822,11 @@ void WriteInitialization::acceptWidget(DomWidget *node)
                 (QStringList() << QLatin1String("horizontalHeader")
                                << QLatin1String("verticalHeader"));
 
-        foreach (const QString &headerPrefix, headerPrefixes) {
+        for (int i=0; i<headerPrefixes.length(); ++i) {
+            const QString &headerPrefix = headerPrefixes.at(i);
             DomPropertyList headerProperties;
-            foreach (const QString &realPropertyName, realPropertyNames) {
+            for (int j=0; j<realPropertyNames.length(); ++j) {
+                const QString &realPropertyName = realPropertyNames.at(j);
                 const QString upperPropertyName = realPropertyName.at(0).toUpper()
                                                   + realPropertyName.mid(1);
                 const QString fakePropertyName = headerPrefix + upperPropertyName;
@@ -2496,8 +2499,10 @@ static void generateMultiDirectiveBegin(QTextStream &outputStream, const QSet<QS
         return;
 
     QMap<QString, bool> map; // bool is dummy. The idea is to sort that (always generate in the same order) by putting a set into a map
-    foreach (const QString &str, directives)
+    for (int i=0; i<directives.length(); ++i) {
+        const QString &str = directives.at(i);
         map.insert(str, true);
+    }
 
     if (map.size() == 1) {
         outputStream << "#ifndef " << map.constBegin().key() << endl;
@@ -2506,7 +2511,8 @@ static void generateMultiDirectiveBegin(QTextStream &outputStream, const QSet<QS
 
     outputStream << "#if";
     bool doOr = false;
-    foreach (const QString &str, map.keys()) {
+    for (int i=0; i<map.keys().length(); ++i) {
+        const QString &str = map.keys().at(i);
         if (doOr)
             outputStream << " ||";
         outputStream << " !defined(" << str << ')';

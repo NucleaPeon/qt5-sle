@@ -62,7 +62,7 @@ PERL=`$WHICH perl 2>/dev/null`
 
 # find out which awk we want to use, prefer gawk, then nawk, then regular awk
 AWK=
-for e in gawk nawk awk; do
+for e in mawk gawk nawk awk; do
     if "$WHICH" $e >/dev/null 2>&1 && ( $e -f /dev/null /dev/null ) >/dev/null 2>&1; then
         AWK=$e
         break

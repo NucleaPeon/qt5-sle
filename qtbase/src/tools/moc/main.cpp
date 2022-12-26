@@ -154,8 +154,8 @@ static QStringList argumentsFromCommandLineAndFile(const QStringList &arguments)
 {
     QStringList allArguments;
     allArguments.reserve(arguments.size());
-    foreach (const QString &argument, arguments) {
-        // "@file" doesn't start with a '-' so we can't use QCommandLineParser for it
+    for (int i=0; i<arguments.length(); ++i) {
+    	const QString &argument = arguments.at(i);
         if (argument.startsWith(QLatin1Char('@'))) {
             QString optionsFile = argument;
             optionsFile.remove(0, 1);
@@ -312,25 +312,32 @@ int runMoc(int argc, char **argv)
         if (parser.isSet(forceIncludeOption)) {
             moc.noInclude = false;
             autoInclude = false;
-            foreach (const QString &include, parser.values(forceIncludeOption)) {
+            for (int i=0; i<parser.values(forceIncludeOption).length(); ++i) {
+                const QString &include = parser.values(forceIncludeOption).at(i);
                 moc.includeFiles.append(QFile::encodeName(include));
                 defaultInclude = false;
              }
         }
-        foreach (const QString &include, parser.values(prependIncludeOption))
+        for (int i=0; i<parser.values(prependIncludeOption).length(); ++i) {
+            const QString &include = parser.values(prependIncludeOption).at(i);
             moc.includeFiles.prepend(QFile::encodeName(include));
         if (parser.isSet(pathPrefixOption))
             moc.includePath = QFile::encodeName(parser.value(pathPrefixOption));
     }
-    foreach (const QString &path, parser.values(includePathOption))
+    int i = 0;
+    for (i=0; i<parser.values(includePathOption).length(); ++i) {
+        const QString path = parser.values(includePathOption).at(i);
         pp.includes += Preprocessor::IncludePath(QFile::encodeName(path));
-    foreach (const QString &path, parser.values(macFrameworkOption)) {
+    }
+    for (i=0; i<parser.values(macFrameworkOption).length(); ++i) {
+        const QString &path = parser.values(macFrameworkOption).at(i);
         // minimalistic framework support for the mac
         Preprocessor::IncludePath p(QFile::encodeName(path));
         p.isFrameworkPath = true;
         pp.includes += p;
     }
-    foreach (const QString &arg, parser.values(defineOption)) {
+    for (i=0; i<parser.values(defineOption).length(); ++i) {
+        const QString &arg = parser.values(defineOption).at(i);
         QByteArray name = arg.toLocal8Bit();
         QByteArray value("1");
         int eq = name.indexOf('=');
@@ -347,7 +354,8 @@ int runMoc(int argc, char **argv)
         macro.symbols.removeLast(); // remove the EOF symbol
         pp.macros.insert(name, macro);
     }
-    foreach (const QString &arg, parser.values(undefineOption)) {
+    for (i=0; i<parser.values(undefineOption).length(); ++i) {
+        const QString &arg = parser.values(undefineOption).at(i);
         QByteArray macro = arg.toLocal8Bit();
         if (macro.isEmpty()) {
             error("Missing macro name");
@@ -392,7 +400,8 @@ int runMoc(int argc, char **argv)
         moc.filename = filename.toLocal8Bit();
     }
 
-    foreach (const QString &md, parser.values(metadataOption)) {
+    for (i=0; i<parser.values(metadataOption).length(); ++i) {
+        const QString &md = parser.values(metadataOption).at(i);
         int split = md.indexOf(QLatin1Char('='));
         QString key = md.left(split);
         QString value = md.mid(split + 1);

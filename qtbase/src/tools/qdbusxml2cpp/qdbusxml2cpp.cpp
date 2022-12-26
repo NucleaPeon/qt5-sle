@@ -327,7 +327,8 @@ static QString classNameForInterface(const QString &interface, ClassType classTy
 
     QString retval;
     if (classType == Proxy)
-        foreach (QString part, parts) {
+        for (int i=0; i<parts.length(); ++i) }
+            QString part = parts.at(i);
             part[0] = part[0].toUpper();
             retval += part;
         }
@@ -571,7 +572,8 @@ static void writeProxy(const QString &filename, const QDBusIntrospection::Interf
        << includeList
        << "#include <QtDBus/QtDBus>" << endl;
 
-    foreach (const QString &include, includes) {
+    for (int i=0; i<includes.length(); ++i) {
+        const QString &include = includes.at(i);
         hs << "#include \"" << include << "\"" << endl;
         if (headerName.isEmpty())
             cs << "#include \"" << include << "\"" << endl;
@@ -881,7 +883,8 @@ static void writeAdaptor(const QString &filename, const QDBusIntrospection::Inte
            << "#include <QtCore/QVariant>" << endl;
     hs << "#include <QtDBus/QtDBus>" << endl;
 
-    foreach (const QString &include, includes) {
+    for (int i=0; i<includes.length(); ++i) {
+        const QString &include = includes.at(i);
         hs << "#include \"" << include << "\"" << endl;
         if (headerName.isEmpty())
             cs << "#include \"" << include << "\"" << endl;
