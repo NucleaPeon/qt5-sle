@@ -62,7 +62,7 @@ PERL=`$WHICH perl 2>/dev/null`
 
 # find out which awk we want to use, prefer gawk, then nawk, then regular awk
 AWK=
-for e in mawk gawk nawk awk; do
+for e in mawk nawk gawk awk; do
     if "$WHICH" $e >/dev/null 2>&1 && ( $e -f /dev/null /dev/null ) >/dev/null 2>&1; then
         AWK=$e
         break
@@ -3813,7 +3813,6 @@ else
     mv -f $DEVICE_VARS_FILE "$DEVICE_VARS_OUTFILE"
     DEVICE_VARS_FILE="$DEVICE_VARS_OUTFILE"
 fi
-
 #-------------------------------------------------------------------------------
 # Verify makespec
 #-------------------------------------------------------------------------------
@@ -3911,10 +3910,9 @@ compileTest()
 #-------------------------------------------------------------------------------
 # determine the target and host architectures
 #-------------------------------------------------------------------------------
-
 # Use config.tests/arch/arch.pro to have the compiler tell us what the target architecture is
 OUTFILE=$outpath/arch.result
-"$unixtests/arch.test" "$XQMAKESPEC" $OPT_VERBOSE "$relpath" "$outpath" "$OUTFILE" "target" $I_FLAGS $D_FLAGS $L_FLAGS
+AWK=$AWK "$unixtests/arch.test" "$XQMAKESPEC" $OPT_VERBOSE "$relpath" "$outpath" "$OUTFILE" "target" $I_FLAGS $D_FLAGS $L_FLAGS
 if [ $? -eq 0 ]; then
     eval `cat "$OUTFILE"`
 else
@@ -3952,7 +3950,6 @@ fi
 #-------------------------------------------------------------------------------
 # functionality tests
 #-------------------------------------------------------------------------------
-
 # Detect objcopy support
 if [ "$CFG_SEPARATE_DEBUG_INFO" = "yes" ]; then
     if ! compileTest unix/objcopy "objcopy"; then
@@ -4075,7 +4072,6 @@ if [ "${CFG_AVX}" = "auto" ]; then
        CFG_AVX=no
     fi
 fi
-
 # detect avx2 support
 if [ "${CFG_AVX}" = "no" ]; then
     CFG_AVX2=no
